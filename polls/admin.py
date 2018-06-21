@@ -3,13 +3,28 @@ from django.contrib import admin
 from .models import Question, Choice
 
 
+# shows choice form in line
+# class ChoiceInline(admin.StackedInline):
+#     model = Choice
+#     extra = 3
+
+# shows choice form in table
+class ChoiceInline(admin.TabularInline):
+    model = Choice
+    extra = 3
+
+
 class QuestionAdmin(admin.ModelAdmin):
     # fields = ['pub_date', 'question_text']
+
+    list_display = ('question_text', 'pub_date', 'was_published_recently')
+    list_filter = ['pub_date']
 
     fieldsets = [
         ('Text Information', {'fields': ['question_text']}),
         ('Date information', {'fields': ['pub_date']}),
     ]
+    inlines = [ChoiceInline]
 
 
 admin.site.register(Question, QuestionAdmin)
